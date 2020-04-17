@@ -1,7 +1,7 @@
 import React from 'react'
 import { Route } from 'react-router-dom'
 
-import Talk_v1 from './versioned/Talk_v1'
+import Talk_v1 from './versioned/v1/components'
 import Talk_v2 from './versioned/Talk_v2'
 
 const AppRouter = () =>
