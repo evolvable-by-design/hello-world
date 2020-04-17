@@ -1,0 +1,108 @@
+openapi: "3.0.0"
+info:
+  version: 1.0.0
+  title: APIDays Demo
+  license:
+    name: MIT
+  contact:
+    name: Antoine Cheron
+    url: https://antoinecheron.github.io
+    email: antoine.cheron@fabernovel.com
+servers:
+  - url: http://localhost:8080/
+paths:
+  /talk:
+    post:
+      summary: Creates a new talk
+      operationId: createTalk
+      x-@id: api_days_vocab:createTalk
+      tags:
+        - Talk
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateTalkRequest'
+      responses:
+        '201':
+          description: Talk just created
+          headers:
+            Location:
+              description: 'URL to the resource created'
+              schema:
+                x-@type: '@id'
+                type: string
+                format: url
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TalkDetails'
+          links:
+            delete:
+              x-@relation: api_days_vocab:DeleteAction
+              operationId: deleteTalk
+  /talk/{name}:
+    parameters: 
+      - $ref: '#/components/parameters/projectName'
+    delete:
+      summary: Delete a talk
+      operationId: deleteTalk
+      x-@id: api_days_vocab:deleteTalk
+      tags:
+        - Talk
+      responses:
+        '204':
+          description: Success
+components:
+  parameters:
+    projectName: 
+      name: name
+      x-@id: api_days_vocab:projectName
+      in: path
+      description: Name of the talk
+      required: true
+      schema:
+        type: string
+  schemas:
+    CreateTalkRequest:
+      type: object
+      required:
+        - name
+        - speaker
+      properties:
+        name:
+          type: string
+          x-@id: api_days_vocab:projectName
+          minLength: 10
+          maxLength: 80
+        speaker:
+          type: string
+        startTime:
+          type: string
+          format: datetime
+    TalkDetails:
+      type: object
+      properties:
+        name:
+          type: string
+          x-@id: api_days_vocab:projectName
+          minLength: 10
+          maxLength: 80
+        speaker:
+          type: string
+        startTime:
+          type: string
+          format: datetime
+# json-LD context
+x-@context:
+  x-@context: '@context'
+  x-@id: '@id'
+  x-@type: '@type'
+  x-@relation: 'dce:relation'
+  schema: 'https://schema.org/'
+  api_days_vocab: 'https://example.com/api_days_vocab#'
+  email: schema:email
+  CreateTalkRequest: api_days_vocab:CreateTalkRequest
+  speaker: api_days_vocab:speaker
+  name: schema:name
+  startTime: schema:startTime
