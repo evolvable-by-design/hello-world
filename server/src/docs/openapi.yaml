@@ -1,6 +1,6 @@
 openapi: "3.0.0"
 info:
-  version: 1.0.0
+  version: 2.0.0
   title: APIDays Demo
   license:
     name: MIT
@@ -11,13 +11,15 @@ info:
 servers:
   - url: http://localhost:8080/
 paths:
-  /talk:
+  /talks:
     post:
       summary: Creates a new talk
       operationId: createTalk
       x-@id: api_days_vocab:createTalk
       tags:
         - Talk
+      parameters: 
+        - $ref: '#/components/parameters/role'
       requestBody:
         content:
           application/json:
@@ -38,12 +40,15 @@ paths:
               schema:
                 $ref: '#/components/schemas/TalkDetails'
           links:
+            attend:
+              x-@relation: api_days_vocab:AttendAction
+              operationId: attendToTalk
             delete:
               x-@relation: api_days_vocab:DeleteAction
               operationId: deleteTalk
-  /talk/{name}:
+  /talks/{title}:
     parameters: 
-      - $ref: '#/components/parameters/projectName'
+      - $ref: '#/components/parameters/projectTitle'
     delete:
       summary: Delete a talk
       operationId: deleteTalk
@@ -53,46 +58,87 @@ paths:
       responses:
         '204':
           description: Success
+  /talks/{title}/attend:
+    parameters: 
+      - $ref: '#/components/parameters/projectTitle'
+    post:
+      summary: Attend to a new talk
+      operationId: attendToTalk
+      x-@id: api_days_vocab:AttendToTalk
+      tags:
+        - Talk
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AttendToTalkRequest'
+      responses:
+        '204':
+          description: Success
 components:
   parameters:
-    projectName: 
-      name: name
+    projectTitle: 
+      name: title
       x-@id: api_days_vocab:projectName
       in: path
       description: Name of the talk
       required: true
       schema:
         type: string
+    role: 
+      name: role
+      x-@id: api_days_vocab:role
+      in: query
+      description: Role of the user
+      required: false
+      schema:
+        type: string
+        enum: [ 'admin', 'user' ]
   schemas:
     CreateTalkRequest:
       type: object
       required:
-        - name
+        - title
         - speaker
       properties:
-        name:
+        title:
           type: string
           x-@id: api_days_vocab:projectName
           minLength: 10
-          maxLength: 80
+          maxLength: 40
         speaker:
           type: string
         startTime:
           type: string
           format: datetime
+        category:
+          type: string
+          enum: [ 'API Design', 'API Maintenance', 'API Management' ]
+    AttendToTalkRequest:
+      type: object
+      required:
+        - email
+      properties:
+        email:
+          type: string
+          x-@id: schema:email
+          format: email
     TalkDetails:
       type: object
       properties:
-        name:
+        title:
           type: string
           x-@id: api_days_vocab:projectName
           minLength: 10
-          maxLength: 80
+          maxLength: 40
         speaker:
           type: string
         startTime:
           type: string
           format: datetime
+        category:
+          type: string
+          enum: [ 'API Design', 'API Maintenance', 'API Management' ]
 # json-LD context
 x-@context:
   x-@context: '@context'
@@ -102,7 +148,10 @@ x-@context:
   schema: 'https://schema.org/'
   api_days_vocab: 'https://example.com/api_days_vocab#'
   email: schema:email
+  AttendToTalkRequest: api_days_vocab:AttendToTalkRequest
   CreateTalkRequest: api_days_vocab:CreateTalkRequest
   speaker: api_days_vocab:speaker
   name: schema:name
+  title: schema:name
   startTime: schema:startTime
+  category: schema:category

@@ -48,6 +48,7 @@ paths:
       summary: Delete a talk
       operationId: deleteTalk
       x-@id: api_days_vocab:deleteTalk
+      x-@type: schema:DeleteAction
       tags:
         - Talk
       responses:
@@ -103,6 +104,7 @@ x-@context:
   api_days_vocab: 'https://example.com/api_days_vocab#'
   email: schema:email
   CreateTalkRequest: api_days_vocab:CreateTalkRequest
+  TalkDetails: api_days_vocab:TalkDetails
   speaker: api_days_vocab:speaker
   name: schema:name
   startTime: schema:startTime

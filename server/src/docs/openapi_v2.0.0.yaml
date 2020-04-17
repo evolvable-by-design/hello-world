@@ -18,6 +18,8 @@ paths:
       x-@id: api_days_vocab:createTalk
       tags:
         - Talk
+      parameters: 
+        - $ref: '#/components/parameters/role'
       requestBody:
         content:
           application/json:
@@ -44,9 +46,9 @@ paths:
             delete:
               x-@relation: api_days_vocab:DeleteAction
               operationId: deleteTalk
-  /talks/{name}:
+  /talks/{title}:
     parameters: 
-      - $ref: '#/components/parameters/projectName'
+      - $ref: '#/components/parameters/projectTitle'
     delete:
       summary: Delete a talk
       operationId: deleteTalk
@@ -56,9 +58,9 @@ paths:
       responses:
         '204':
           description: Success
-  /talks/{name}/attend:
+  /talks/{title}/attend:
     parameters: 
-      - $ref: '#/components/parameters/projectName'
+      - $ref: '#/components/parameters/projectTitle'
     post:
       summary: Attend to a new talk
       operationId: attendToTalk
@@ -75,26 +77,35 @@ paths:
           description: Success
 components:
   parameters:
-    projectName: 
-      name: name
+    projectTitle: 
+      name: title
       x-@id: api_days_vocab:projectName
       in: path
       description: Name of the talk
       required: true
       schema:
         type: string
+    role: 
+      name: role
+      x-@id: api_days_vocab:role
+      in: query
+      description: Role of the user
+      required: false
+      schema:
+        type: string
+        enum: [ 'admin', 'user' ]
   schemas:
     CreateTalkRequest:
       type: object
       required:
-        - name
+        - title
         - speaker
       properties:
-        name:
+        title:
           type: string
           x-@id: api_days_vocab:projectName
           minLength: 10
-          maxLength: 80
+          maxLength: 40
         speaker:
           type: string
         startTime:
@@ -115,11 +126,11 @@ components:
     TalkDetails:
       type: object
       properties:
-        name:
+        title:
           type: string
           x-@id: api_days_vocab:projectName
           minLength: 10
-          maxLength: 80
+          maxLength: 40
         speaker:
           type: string
         startTime:
@@ -141,5 +152,6 @@ x-@context:
   CreateTalkRequest: api_days_vocab:CreateTalkRequest
   speaker: api_days_vocab:speaker
   name: schema:name
+  title: schema:name
   startTime: schema:startTime
   category: schema:category

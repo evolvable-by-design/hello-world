@@ -5,3 +5,5 @@ Expose a very simple web API for the purpose of the hello world example. This AP
 To start it: `npm start`
 
 Use v1.0.0: `git checkout server-v1.0.0 && npm start`
+
+Use v2.0.0: `git checkout server-v2.0.0 && npm start`
