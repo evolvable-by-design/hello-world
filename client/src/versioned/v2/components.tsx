@@ -3,7 +3,7 @@ import { Alert, Button, Card, Icon, Pane, Heading, Select, FormField, TextInputF
 import axios, { AxiosResponse, AxiosError } from 'axios'
 
 import { TalkDetails, Role, TalkCategory } from './models'
-import { WithHypermedia } from '../../models/hypermedia'
+import { WithHypermedia } from '../../commons/models/hypermedia'
 
 function TalkCreator() {
   const [role, setRole] = useState<Role>('admin')

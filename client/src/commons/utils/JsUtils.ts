@@ -14,16 +14,24 @@ export function stateSetter (
 export function capitalize (str: string): string {
   return str
     .split(' ')
-    .map(firstLetterUppercase)
+    .map(s => firstLetterUppercase(s))
     .join(' ')
 }
 
 export function firstLetterUppercase (str: string): string {
-  return str[0].toUpperCase() + str.substr(1)
+  if (str[0] === undefined) {
+    return ''
+  } else {
+    return str[0].toUpperCase() + str.substr(1)
+  }
 }
 
 export function isUpperCase (character: string): boolean {
-  return character === character.toUpperCase()
+  if (character === ' ') {
+    return true
+  } else {
+    return character === character.toUpperCase()
+  }
 }
 
 export function spaceCamelCaseWord (str: string): string {
@@ -33,7 +41,11 @@ export function spaceCamelCaseWord (str: string): string {
   const s = str.slice(1)
 
   for (let i = 0; i < s.length; i++) {
-    if (isUpperCase(s[i]) && (i <= 0 || !isUpperCase(s[i - 1]))) {
+    if (
+      s[i] !== ' ' &&
+      isUpperCase(s[i]) &&
+      (i <= 0 || !isUpperCase(s[i - 1]))
+    ) {
       result += ' '
     }
 

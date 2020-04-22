@@ -3,7 +3,7 @@ import { Alert, Button, Card, Icon, Pane, Heading, TextInputField, Spinner, Para
 import axios, { AxiosResponse, AxiosError } from 'axios'
 
 import { TalkDetails } from './models'
-import { WithHypermedia } from '../../models/hypermedia'
+import { WithHypermedia } from '../../commons/models/hypermedia'
 
 function TalkCreator() {
   const [isLoading, setIsLoading] = useState(false)
